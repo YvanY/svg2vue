@@ -1,0 +1,30 @@
+{
+  "name": "svg2vue",
+  "version": "0.1.0",
+  "description": "a command line tool to optimize svg and wrap it into vue component",
+  "bin": {
+    "svg2vue": "bin/svg2vue"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:YvanY/svg2vue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YvanY/svg2vue/issues"
+  },
+  "homepage": "https://github.com/YvanY/svg2vue#readme",
+  "keywords": [
+    "svg",
+    "vue",
+    "icon"
+  ],
+  "author": "Yvan Yang",
+  "license": "MIT",
+  "dependencies": {
+    "decamelize": "^3.2.0",
+    "execa": "^1.0.0",
+    "pascalcase": "^0.1.1",
+    "svgo": "^1.2.2",
+    "yargs": "^13.2.4"
+  }
+}

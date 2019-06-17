@@ -1,0 +1,102 @@
+#!/usr/bin/env node
+const yargs = require('yargs')
+const execa = require('execa')
+const path = require('path')
+const fs = require('fs')
+const pascalcase = require('pascalcase')
+
+function optimizeSvg(svgoConfig, sourceDirectory) {
+  return execa.sync('npx', ['svgo', '--config', svgoConfig, '-f', sourceDirectory])
+}
+
+function copyBaseComponent(componentPath, targetDirectory) {
+  const name = `IconBase${path.extname(componentPath)}`
+  const targetPath = path.join(targetDirectory, name)
+
+  return fs.copyFileSync(componentPath, targetPath)
+}
+
+function genComponents(sourceDirectory, targetDirectory) {
+  const files = fs.readdirSync(sourceDirectory)
+
+  for (const file of files) {
+    const { name, ext } = path.parse(file)
+
+    if (ext !== '.svg') {
+      continue
+    }
+
+    const componentName = 'Icon' + pascalcase(name)
+    const sourcePath = path.join(sourceDirectory, file)
+    const targetPath = path.join(targetDirectory, componentName + '.vue')
+
+    const svgContent = fs.readFileSync(sourcePath, 'utf8')
+    const componentContent = convert(svgContent, componentName)
+
+    fs.writeFileSync(targetPath, componentContent)
+  }
+}
+
+function genIndexEntry(directory) {
+  const files = Array.from(fs.readdirSync(directory))
+  const entryPath = path.join(directory, 'index.js')
+  let entryContent = ''
+
+  for (const file of files) {
+    const { base, name, ext } = path.parse(file)
+
+    if (ext !== '.vue') {
+      continue
+    }
+
+    entryContent += `export { default as ${name} } from './${base}'\n`
+  }
+
+  fs.writeFileSync(entryPath, entryContent)
+}
+
+function convert(svgContent, componentName = 'Icon') {
+  const template = svgContent
+    .trim()
+    .replace('>', ' v-bind="iconAttrs" v-on="iconListeners">')
+    .replace(/(?=\/>)/g, ' ')
+    .replace(/^|(?<=\n)/g, '  ')
+
+  return `
+<template>
+${template}
+</template>
+
+<script>
+import IconBase from './IconBase.vue'
+
+export default {
+  name: '${componentName}',
+  extends: IconBase
+}
+</script>
+`.trim()
+}
+
+const argv = yargs
+  .command({
+    command: '$0 <source_directory> <target_directory>',
+    builder() {
+      yargs.option('svgo-config', {
+        describe: 'Svgo config file',
+        default: path.join(__dirname, '../svgo.yml')
+      })
+
+      yargs.option('base-component', {
+        describe: 'Vue component that all icon components extends from',
+        default: path.join(__dirname, '../lib/BaseComponent.vue')
+      })
+    }
+  })
+  .help()
+  .argv
+
+optimizeSvg(argv.svgoConfig, argv.source_directory)
+copyBaseComponent(argv.baseComponent, argv.target_directory)
+genComponents(argv.source_directory, argv.target_directory)
+genIndexEntry(argv.target_directory)
