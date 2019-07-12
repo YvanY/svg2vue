@@ -4,13 +4,14 @@ const execa = require('execa')
 const path = require('path')
 const fs = require('fs')
 const pascalcase = require('pascalcase')
+const mkdirp = require('mkdirp')
 
 function optimizeSvg(svgoConfig, sourceDirectory) {
   return execa.sync('npx', ['svgo', '--config', svgoConfig, '-f', sourceDirectory])
 }
 
 function copyBaseComponent(componentPath, targetDirectory) {
-  const name = `IconBase${path.extname(componentPath)}`
+  const name = `_IconBase${path.extname(componentPath)}`
   const targetPath = path.join(targetDirectory, name)
 
   return fs.copyFileSync(componentPath, targetPath)
@@ -68,11 +69,11 @@ ${template}
 </template>
 
 <script>
-import IconBase from './IconBase.vue'
+import _IconBase from './_IconBase.vue'
 
 export default {
   name: '${componentName}',
-  extends: IconBase
+  extends: _IconBase
 }
 </script>
 `.trim()
@@ -96,6 +97,7 @@ const argv = yargs
   .help()
   .argv
 
+mkdirp(argv.target_directory)
 optimizeSvg(argv.svgoConfig, argv.source_directory)
 copyBaseComponent(argv.baseComponent, argv.target_directory)
 genComponents(argv.source_directory, argv.target_directory)
