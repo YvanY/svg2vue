@@ -1,6 +1,4 @@
 <script>
-import decamelize from 'decamelize'
-
 export default {
   props: {
     width: {
@@ -23,14 +21,10 @@ export default {
 
   computed: {
     iconClass() {
-      return [
-        'svg2vue',
-        decamelize(this.$options.name, '-'),
-        {
-          'svg2vue-inherit-fill': this.inheritFill,
-          'svg2vue-current-color': !this.fill && this.inheritFill
-        }
-      ]
+      return {
+        'svg2vue-inherit-fill': this.inheritFill,
+        'svg2vue-current-color': !this.fill && this.inheritFill
+      }
     },
 
     iconAttrs() {

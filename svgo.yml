@@ -42,6 +42,7 @@ plugins:
   - removeAttrs:
       attrs:
         - 'p-id'
+        - 'svg:class'
         - 'svg:width'
         - 'svg:height'
   - removeElementsByAttr

@@ -5,6 +5,7 @@ const path = require('path')
 const fs = require('fs')
 const pascalcase = require('pascalcase')
 const mkdirp = require('mkdirp')
+const decamelize = require('decamelize')
 
 function optimizeSvg(svgoConfig, sourceDirectory) {
   return execa.sync('npx', ['svgo', '--config', svgoConfig, '-f', sourceDirectory])
@@ -59,7 +60,7 @@ function genIndexEntry(directory) {
 function convert(svgContent, componentName = 'Icon') {
   const template = svgContent
     .trim()
-    .replace('>', ' v-bind="iconAttrs" v-on="iconListeners">')
+    .replace('>', ` class="svg2vue ${decamelize(componentName, '-')}" v-bind="iconAttrs" v-on="iconListeners">`)
     .replace(/(?=\/>)/g, ' ')
     .replace(/^|(?<=\n)/g, '  ')
 
