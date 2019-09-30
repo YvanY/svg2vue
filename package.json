@@ -1,6 +1,6 @@
 {
   "name": "svg2vue",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "a command line tool to optimize svg and wrap it into vue component",
   "bin": {
     "svg2vue": "bin/svg2vue"
