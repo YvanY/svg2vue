@@ -9,30 +9,14 @@ export default {
     height: {
       type: [Number, String],
       default: '1em'
-    },
-
-    fill: null,
-
-    inheritFill: {
-      type: Boolean,
-      default: true
     }
   },
 
   computed: {
-    iconClass() {
-      return {
-        'svg2vue-inherit-fill': this.inheritFill,
-        'svg2vue-current-color': !this.fill && this.inheritFill
-      }
-    },
-
     iconAttrs() {
       return {
-        class: this.iconClass,
         height: this.height,
-        width: this.width,
-        fill: this.fill
+        width: this.width
       }
     },
 
@@ -48,11 +32,7 @@ export default {
   vertical-align: -0.15em;
 }
 
-.svg2vue-inherit-fill path, .svg2vue-inherit-fill g {
-  fill: inherit;
-}
-
-.svg2vue-current-color {
+.svg2vue:not(fill) {
   fill: currentColor;
 }
 </style>

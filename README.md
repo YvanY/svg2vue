@@ -38,9 +38,10 @@ Options:
 ```vue
 <template>
   <div class="demo">
-    <icon-example />
-    <!-- do not fill with font color -->
-    <icon-example :inherit-fill="false" />
+    <!-- use fill -->
+    <icon-example fill="#fff" />
+    <!-- use style -->
+    <icon-example style="color: #fff;" />
   </div>
 </template>
 
@@ -74,3 +75,7 @@ pass a vue component file to replace [default component](./lib/BaseComponent.vue
 ```sh
 svgo2vue <source_directory> <target_directory> --base-component="./BaseComponent.vue"
 ```
+
+### Color
+
+keep `fill` attr on `<path>`, and it's color will not changed by attr `fill` or style `color` on the component root attrs
