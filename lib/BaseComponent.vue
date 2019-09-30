@@ -32,7 +32,7 @@ export default {
   vertical-align: -0.15em;
 }
 
-.svg2vue:not(fill) {
+.svg2vue:not([fill]) {
   fill: currentColor;
 }
 </style>
