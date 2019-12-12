@@ -1,11 +1,6 @@
 <script>
 export default {
   props: {
-    width: {
-      type: [Number, String],
-      default: '1em'
-    },
-
     height: {
       type: [Number, String],
       default: '1em'
@@ -15,8 +10,7 @@ export default {
   computed: {
     iconAttrs() {
       return {
-        height: this.height,
-        width: this.width
+        height: this.height
       }
     },
 
